@@ -1,2 +1,2 @@
 export * from './ngx-graph.module';
-// @TODO: export * from './graph/layouts/customLayouts';
+export * from './graph/layouts/customLayouts';
