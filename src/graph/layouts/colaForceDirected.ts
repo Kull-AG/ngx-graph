@@ -32,7 +32,7 @@ export function toNode(nodes: InputNode[], nodeRef: InputNode | number): InputNo
 
 export class ColaForceDirectedLayout implements Layout {
   defaultSettings: ColaForceDirectedSettings = {
-    force: d3adaptor({
+    force: d3adaptor(<any>{
       ...d3Dispatch,
       ...d3Force,
       ...d3Timer,

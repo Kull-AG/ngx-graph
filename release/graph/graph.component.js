@@ -307,18 +307,22 @@ var GraphComponent = /** @class */ (function (_super) {
             if (!n.data) {
                 n.data = {};
             }
-            n.data = {
-                color: _this.colors.getColor(_this.groupResultsBy(n))
-            };
+            if (!n.data.color) {
+                n.data = {
+                    color: _this.colors.getColor(_this.groupResultsBy(n))
+                };
+            }
         });
         (this.graph.clusters || []).map(function (n) {
             n.transform = "translate(" + (n.position.x - n.dimension.width / 2 || 0) + ", " + (n.position.y - n.dimension.height / 2 || 0) + ")";
             if (!n.data) {
                 n.data = {};
             }
-            n.data = {
-                color: _this.colors.getColor(_this.groupResultsBy(n))
-            };
+            if (!n.data.color) {
+                n.data = {
+                    color: _this.colors.getColor(_this.groupResultsBy(n))
+                };
+            }
         });
         // Update the labels to the new positions
         var newLinks = [];

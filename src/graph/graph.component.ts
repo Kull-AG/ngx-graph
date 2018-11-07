@@ -376,9 +376,12 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       if (!n.data) {
         n.data = {};
       }
-      n.data = {
-        color: this.colors.getColor(this.groupResultsBy(n))
-      };
+      if(!n.data.color){
+        
+        n.data = {
+          color: this.colors.getColor(this.groupResultsBy(n))
+        };
+      }
     });
     (this.graph.clusters || []).map(n => {
       n.transform = `translate(${
@@ -387,9 +390,12 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       if (!n.data) {
         n.data = {};
       }
+      if(!n.data.color){
+        
       n.data = {
         color: this.colors.getColor(this.groupResultsBy(n))
       };
+    }
     });
 
     // Update the labels to the new positions
