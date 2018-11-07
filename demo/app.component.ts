@@ -156,7 +156,10 @@ export class AppComponent implements OnInit {
       this.graph.edges.push({
         source: this.graph.nodes[Math.floor(Math.random() * (this.graph.nodes.length - 1))].id,
         target: hNode.id,
-        label: 'on success'
+        label: 'on success',
+        data:{
+          color: '#00ff00'
+        }
       });
 
       this.graph.edges = [...this.graph.edges];

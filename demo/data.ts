@@ -255,7 +255,10 @@ export function generateGraph(nodeCount: number): Graph {
       id: id(),
       label: country,
       data: {
-        value: country
+        value: country,
+        color: '#ff33ff',
+        textColor: '#000000'
+
       }
     });
     for (let j = 0; j < nodes.length - 1; j++) {
@@ -264,7 +267,12 @@ export function generateGraph(nodeCount: number): Graph {
           id: id(),
           source: nodes[i].id,
           target: nodes[j].id,
-          label: 'on success'
+          label: 'on success',
+          data:{
+            color: '#ff33ff',
+            textColor: '#000000'
+          }
+
         });
       }
     }

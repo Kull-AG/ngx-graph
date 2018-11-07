@@ -1,19 +1,18 @@
 <main [class]="theme">
   <div class="chart-col">
     <div style="position: absolute; top: 50px; left: 50px; right: 50px; bottom: 50px;">
-      <div class="chart-wrapper" *ngIf="graph as g" style="width:100%; height:100%;">
-        
-      <ngx-graph  #graphEl class="chart-container" [view]="view" [enableZoom]="enableZoom" [autoZoom]="autoZoom" [panOnZoom]="panOnZoom"
+      <ngx-graph *ngIf="graph" #graphEl class="chart-container" [view]="view" [enableZoom]="enableZoom" [autoZoom]="autoZoom" [panOnZoom]="panOnZoom"
         [panOffsetX]="panOffsetX" [panOffsetY]="panOffsetY" [zoomLevel]="zoomLevel" [autoCenter]="autoCenter" [legend]="showLegend"
-        [links]="g.edges" (legendLabelClick)="onLegendLabelClick($event)" [nodes]="g.nodes" [clusters]="g.clusters" [scheme]="colorScheme"
+        [links]="graph.edges" (legendLabelClick)="onLegendLabelClick($event)" [nodes]="graph.nodes" [clusters]="graph.clusters" [scheme]="colorScheme"
         [layout]="customLayout || layoutId" [layoutSettings]="{orientation: orientation}" [curve]="curve" [update$]="update$" [zoomToFit$]="zoomToFit$" [center$]="center$" (select)="select($event)">
 
         <ng-template #defsTemplate>
-            <ng-container *ngFor="let link of g.edges">
-                <!-- id="arrow_{{link.id}}"  -->
-            <svg:marker [attr.id]="'arrow_'+link.id" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
-              <svg:path d="M0,-5L10,0L0,5" [attr.fill]="link.data.color" [attr.stroke]="link.data.color" />
-            </svg:marker></ng-container>
+          <ng-container *ngFor="let link of graph.edges">
+              <!-- id="arrow_{{link.id}}"  -->
+          <svg:marker [attr.id]="'arrow_'+link.id" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
+            <svg:path d="M0,-5L10,0L0,5" [attr.fill]="'#ff00ff'"  />
+            <!-- class="arrow-head" -->
+          </svg:marker></ng-container>
         </ng-template>
 
         <ng-template #clusterTemplate let-cluster>
@@ -25,14 +24,15 @@
         <ng-template #nodeTemplate let-node>
           <svg:g class="node" ngx-tooltip [tooltipPlacement]="'top'" [tooltipType]="'tooltip'" [tooltipTitle]="node.label">
             <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height" [attr.fill]="node.data.color" />
-            <svg:text alignment-baseline="central" [attr.fill]="node.data.textColor" [attr.x]="10" [attr.y]="node.dimension.height / 2">{{node.label}}</svg:text>
+            <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.dimension.height / 2">{{node.label}}</svg:text>
           </svg:g>
         </ng-template>
 
         <ng-template #linkTemplate let-link>
           <svg:g class="edge">
-              <svg:path class="line" stroke-width="2" [attr.marker-end]="'url(#arrow_'+link.id+')'"  [attr.stroke]="link.data.color">
-                </svg:path>
+            <svg:path class="line" stroke-width="2" [attr.marker-end]="'url(#arrow_'+link.id+')'" [attr.stroke]="link.data.color"> 
+              <!-- marker-end="url(#arrow_{{link.id}})"  stroke="#ffffff"-->
+            </svg:path>
             <svg:text class="edge-label" text-anchor="middle">
               <textPath class="text-path" [attr.href]="'#' + link.id" [style.dominant-baseline]="link.dominantBaseline" startOffset="50%">
                 {{link.label}}
@@ -42,8 +42,6 @@
         </ng-template>
 
       </ngx-graph>
-      
-    </div>
     </div>
   </div>
   <div class="sidebar">
