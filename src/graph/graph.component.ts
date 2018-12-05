@@ -58,7 +58,7 @@ export interface Matrix {
   selector: 'ngx-graph',
   styleUrls: ['./graph.component.scss'],
   template: `
-  <ngx-charts-chart [view]="[width, height]" [showLegend]="legend" [legendOptions]="legendOptions" (legendLabelClick)="onClick($event)"
+  <ngx-charts-chart [view]="[width, height]" [showLegend]="legend" [legendOptions]="legendOptions" (legendLabelClick)="onClick($event, undefined)"
   (legendLabelActivate)="onActivate($event)" (legendLabelDeactivate)="onDeactivate($event)" mouseWheel (mouseWheelUp)="onZoom($event, 'in')"
   (mouseWheelDown)="onZoom($event, 'out')">
   <svg:g *ngIf="initialized && graph" [attr.transform]="transform" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)"
@@ -91,7 +91,7 @@ export interface Matrix {
     </svg:g>
     <svg:g class="nodes">
       <svg:g #nodeElement *ngFor="let node of graph.nodes; trackBy: trackNodeBy" class="node-group" [id]="node.id" [attr.transform]="node.transform"
-        (click)="onClick(node,$event)" (mousedown)="onNodeMouseDown($event, node)">
+        (click)="onClick(node,$event)" (mousedown)="onNodeMouseDown($event, node)" (dblclick)="onDoubleClick(node,$event)">
         <ng-template *ngIf="nodeTemplate" [ngTemplateOutlet]="nodeTemplate" [ngTemplateOutletContext]="{ $implicit: node }">
         </ng-template>
         <svg:circle *ngIf="!nodeTemplate" r="10" [attr.cx]="node.dimension.width / 2" [attr.cy]="node.dimension.height / 2" [attr.fill]="node.data?.color"
@@ -794,6 +794,20 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
    */
   onClick(event, originalEvent): void {
     event.origEvent = originalEvent;
+    this.select.emit(event);
+  }
+
+  /**
+   * Node was clicked
+   *
+   * @param {any} event
+   * @returns {void}
+   *
+   * @memberOf GraphComponent
+   */
+  onDoubleClick(event, originalEvent): void {
+    event.origEvent = originalEvent;
+    event.isDoubleClick = true;
     this.select.emit(event);
   }
 

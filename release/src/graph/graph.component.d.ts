@@ -246,6 +246,15 @@ export declare class GraphComponent extends BaseChartComponent implements OnInit
      */
     onClick(event: any, originalEvent: any): void;
     /**
+     * Node was clicked
+     *
+     * @param {any} event
+     * @returns {void}
+     *
+     * @memberOf GraphComponent
+     */
+    onDoubleClick(event: any, originalEvent: any): void;
+    /**
      * Node was focused
      *
      * @param {any} event
