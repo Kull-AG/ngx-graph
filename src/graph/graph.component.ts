@@ -73,7 +73,7 @@ export interface Matrix {
       (mousedown)="isPanning = true" />
       <svg:g class="clusters">
         <svg:g #clusterElement *ngFor="let node of graph.clusters; trackBy: trackNodeBy" class="node-group" [id]="node.id" [attr.transform]="node.transform"
-          (click)="onClick(node)">
+          (click)="onClick(node,$event)">
           <ng-template *ngIf="clusterTemplate" [ngTemplateOutlet]="clusterTemplate" [ngTemplateOutletContext]="{ $implicit: node }">
           </ng-template>
           <svg:g *ngIf="!clusterTemplate" class="node cluster">
@@ -91,7 +91,7 @@ export interface Matrix {
     </svg:g>
     <svg:g class="nodes">
       <svg:g #nodeElement *ngFor="let node of graph.nodes; trackBy: trackNodeBy" class="node-group" [id]="node.id" [attr.transform]="node.transform"
-        (click)="onClick(node)" (mousedown)="onNodeMouseDown($event, node)">
+        (click)="onClick(node,$event)" (mousedown)="onNodeMouseDown($event, node)">
         <ng-template *ngIf="nodeTemplate" [ngTemplateOutlet]="nodeTemplate" [ngTemplateOutletContext]="{ $implicit: node }">
         </ng-template>
         <svg:circle *ngIf="!nodeTemplate" r="10" [attr.cx]="node.dimension.width / 2" [attr.cy]="node.dimension.height / 2" [attr.fill]="node.data?.color"
@@ -792,7 +792,8 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
    *
    * @memberOf GraphComponent
    */
-  onClick(event): void {
+  onClick(event, originalEvent): void {
+    event.origEvent = originalEvent;
     this.select.emit(event);
   }
 
