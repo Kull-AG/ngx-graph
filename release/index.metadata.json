@@ -1,1 +1,1 @@
-[{"__symbolic":"module","version":4,"metadata":{},"exports":[{"from":"./ngx-graph.module"},{"from":"./graph/layouts/customLayouts"}]}]
+[{"__symbolic":"module","version":4,"metadata":{},"exports":[{"from":"./ngx-graph.module"},{"from":"./graph/layouts/customLayouts"},{"from":"./graph/layouts/layout.service"},{"from":"./graph/graph.component"}]}]

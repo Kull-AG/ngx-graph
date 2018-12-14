@@ -80572,6 +80572,10 @@ var d3ForceDirected_D3ForceDirectedLayout = /** @class */ (function () {
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "ColaForceDirectedLayout", function() { return colaForceDirected_ColaForceDirectedLayout; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "toD3Node", function() { return toD3Node; });
 /* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "D3ForceDirectedLayout", function() { return d3ForceDirected_D3ForceDirectedLayout; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "LayoutService", function() { return layout_service_LayoutService; });
+/* concated harmony reexport */__webpack_require__.d(__webpack_exports__, "GraphComponent", function() { return graph_component_GraphComponent; });
+
+
 
 
 
