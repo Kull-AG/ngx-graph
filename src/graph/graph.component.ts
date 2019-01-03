@@ -173,8 +173,6 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
   _touchLastY = null;
 
   zoomBefore = 1;
-  xBefore = 0;
-  yBefore = 0;
 
   constructor(
     private el: ElementRef,
@@ -341,9 +339,11 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       this.legendOptions = this.getLegendOptions();
 
       this.createGraph();
-      this.saveZoomAndPositionBeforeLoad();
-      this.zoomToFit();
-      this.center();
+
+      // If zoom isn't 1, then nodes sometimes don't render in correct size
+      // zooming to 1 fixes this
+      this.saveZoomBeforeLoad();
+      this.zoomLevel = 1;
       this.updateTransform();
       this.initialized = true;
     });
@@ -373,7 +373,7 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       .pipe(first(graph => graph.nodes.length > 0))
       .subscribe(() => this.applyNodeDimensions());
 
-    this.restoreZoomAndPositionBeforeLoad();
+    this.restoreZoomBeforeLoad();
   }
 
   tick() {
@@ -382,11 +382,14 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       n.transform = `translate(${
         n.position.x - n.dimension.width / 2 || 0}, ${n.position.y - n.dimension.height / 2 || 0
       })`;
+        })`;
       if (!n.data) {
         n.data = {};
       }
       if(!n.data.color){
         
+      if (!n.data.color) {
+
         n.data = {
           color: this.colors.getColor(this.groupResultsBy(n))
         };
@@ -396,6 +399,7 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       n.transform = `translate(${
         n.position.x - n.dimension.width / 2 || 0}, ${n.position.y - n.dimension.height / 2 || 0
       })`;
+        })`;
       if (!n.data) {
         n.data = {};
       }
@@ -405,6 +409,12 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
         color: this.colors.getColor(this.groupResultsBy(n))
       };
     }
+      if (!n.data.color) {
+
+        n.data = {
+          color: this.colors.getColor(this.groupResultsBy(n))
+        };
+      }
     });
 
     // Update the labels to the new positions
@@ -441,6 +451,7 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       newLinks.push(newLink);
     }
     
+
     this.graph.edges = newLinks;
 
     // Map the old links for animations
@@ -1036,23 +1047,15 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
     }
   }
 
-  restoreZoomAndPositionBeforeLoad(): void {
+  restoreZoomBeforeLoad(): void {
     if (this.autoZoom) {
       this.zoomToFit();
     } else {
       this.zoomLevel = this.zoomBefore;
     }
-    if (this.autoCenter) {
-      this.center();
-    } else {
-      this.panOffsetX = this.xBefore;
-      this.panOffsetY = this.yBefore;
-    }
   }
 
-  saveZoomAndPositionBeforeLoad(): void {
+  saveZoomBeforeLoad(): void {
     this.zoomBefore = this.zoomLevel;
-    this.xBefore = this.panOffsetX;
-    this.yBefore = this.panOffsetY;
   }
 }
