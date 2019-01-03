@@ -381,13 +381,10 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
     this.graph.nodes.map(n => {
       n.transform = `translate(${
         n.position.x - n.dimension.width / 2 || 0}, ${n.position.y - n.dimension.height / 2 || 0
-      })`;
         })`;
       if (!n.data) {
         n.data = {};
       }
-      if(!n.data.color){
-        
       if (!n.data.color) {
 
         n.data = {
@@ -398,17 +395,10 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
     (this.graph.clusters || []).map(n => {
       n.transform = `translate(${
         n.position.x - n.dimension.width / 2 || 0}, ${n.position.y - n.dimension.height / 2 || 0
-      })`;
         })`;
       if (!n.data) {
         n.data = {};
       }
-      if(!n.data.color){
-        
-      n.data = {
-        color: this.colors.getColor(this.groupResultsBy(n))
-      };
-    }
       if (!n.data.color) {
 
         n.data = {
@@ -450,7 +440,6 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       this.calcDominantBaseline(newLink);
       newLinks.push(newLink);
     }
-    
 
     this.graph.edges = newLinks;
 
