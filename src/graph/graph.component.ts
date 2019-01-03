@@ -172,6 +172,10 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
   _touchLastX = null;
   _touchLastY = null;
 
+  zoomBefore = 1;
+  xBefore = 0;
+  yBefore = 0;
+
   constructor(
     private el: ElementRef,
     public zone: NgZone,
@@ -337,6 +341,9 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       this.legendOptions = this.getLegendOptions();
 
       this.createGraph();
+      this.saveZoomAndPositionBeforeLoad();
+      this.zoomToFit();
+      this.center();
       this.updateTransform();
       this.initialized = true;
     });
@@ -365,6 +372,8 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
     result$
       .pipe(first(graph => graph.nodes.length > 0))
       .subscribe(() => this.applyNodeDimensions());
+
+    this.restoreZoomAndPositionBeforeLoad();
   }
 
   tick() {
@@ -1025,5 +1034,25 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
       this.zoomLevel = zoomLevel;
       this.updateTransform();
     }
+  }
+
+  restoreZoomAndPositionBeforeLoad(): void {
+    if (this.autoZoom) {
+      this.zoomToFit();
+    } else {
+      this.zoomLevel = this.zoomBefore;
+    }
+    if (this.autoCenter) {
+      this.center();
+    } else {
+      this.panOffsetX = this.xBefore;
+      this.panOffsetY = this.yBefore;
+    }
+  }
+
+  saveZoomAndPositionBeforeLoad(): void {
+    this.zoomBefore = this.zoomLevel;
+    this.xBefore = this.panOffsetX;
+    this.yBefore = this.panOffsetY;
   }
 }
