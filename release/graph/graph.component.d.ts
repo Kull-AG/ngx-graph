@@ -77,6 +77,7 @@ export declare class GraphComponent extends BaseChartComponent implements OnInit
     transformationMatrix: Matrix;
     _touchLastX: any;
     _touchLastY: any;
+    zoomBefore: number;
     constructor(el: ElementRef, zone: NgZone, cd: ChangeDetectorRef, layoutService: LayoutService);
     groupResultsBy: (node: any) => string;
     /**
@@ -371,4 +372,6 @@ export declare class GraphComponent extends BaseChartComponent implements OnInit
      * Zooms to fit the entier graph
      */
     zoomToFit(): void;
+    restoreZoomBeforeLoad(): void;
+    saveZoomBeforeLoad(): void;
 }
