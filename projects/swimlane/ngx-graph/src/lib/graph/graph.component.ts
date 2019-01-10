@@ -851,10 +851,6 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
   /**
    * Node was clicked
    *
-   * @param {any} event
-   * @returns {void}
-   *
-   * @memberOf GraphComponent
    */
   onDoubleClick(event, originalEvent): void {
     event.origEvent = originalEvent;
