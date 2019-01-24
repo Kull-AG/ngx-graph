@@ -79140,6 +79140,7 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
         _this.transformationMatrix = Object(transformation_matrix_min["identity"])();
         _this._touchLastX = null;
         _this._touchLastY = null;
+        _this.zoomBefore = 1;
         _this.groupResultsBy = function (node) { return node.label; };
         return _this;
     }
@@ -79288,6 +79289,10 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
             _this.setColors();
             _this.legendOptions = _this.getLegendOptions();
             _this.createGraph();
+            // If zoom isn't 1, then nodes sometimes don't render in correct size
+            // zooming to 1 fixes this
+            _this.saveZoomBeforeLoad();
+            _this.zoomLevel = 1;
             _this.updateTransform();
             _this.initialized = true;
         });
@@ -79315,6 +79320,7 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
         result$
             .pipe(Object(operators["first"])(function (graph) { return graph.nodes.length > 0; }))
             .subscribe(function () { return _this.applyNodeDimensions(); });
+        this.restoreZoomBeforeLoad();
     };
     GraphComponent.prototype.tick = function () {
         var _this = this;
@@ -79916,6 +79922,17 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
             this.zoomLevel = zoomLevel;
             this.updateTransform();
         }
+    };
+    GraphComponent.prototype.restoreZoomBeforeLoad = function () {
+        if (this.autoZoom) {
+            this.zoomToFit();
+        }
+        else {
+            this.zoomLevel = this.zoomBefore;
+        }
+    };
+    GraphComponent.prototype.saveZoomBeforeLoad = function () {
+        this.zoomBefore = this.zoomLevel;
     };
     graph_component___decorate([
         Object(core_["Input"])(),
