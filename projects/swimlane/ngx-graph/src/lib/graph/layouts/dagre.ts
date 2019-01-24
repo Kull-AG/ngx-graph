@@ -84,6 +84,7 @@ export class DagreLayout implements Layout {
 
     // generate new points
     edge.points = [startingPoint, endingPoint];
+    
     return graph;
   }
 

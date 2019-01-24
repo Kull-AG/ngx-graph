@@ -319,6 +319,8 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
         })
       );
     }
+
+    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
