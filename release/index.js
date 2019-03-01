@@ -79317,16 +79317,15 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
             _this.graph = graph;
             _this.tick();
         }));
-        result$
-            .pipe(Object(operators["first"])(function (graph) { return graph.nodes.length > 0; }))
-            .subscribe(function () { return _this.applyNodeDimensions(); });
+        result$.pipe(Object(operators["first"])(function (graph) { return graph.nodes.length > 0; })).subscribe(function () { return _this.applyNodeDimensions(); });
         this.restoreZoomBeforeLoad();
     };
     GraphComponent.prototype.tick = function () {
         var _this = this;
         // Transposes view options to the node
         this.graph.nodes.map(function (n) {
-            n.transform = "translate(" + (n.position.x - n.dimension.width / 2 || 0) + ", " + (n.position.y - n.dimension.height / 2 || 0) + ")";
+            n.transform = "translate(" + (n.position.x - n.dimension.width / 2 || 0) + ", " + (n.position.y - n.dimension.height / 2 ||
+                0) + ")";
             if (!n.data) {
                 n.data = {};
             }
@@ -79337,7 +79336,8 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
             }
         });
         (this.graph.clusters || []).map(function (n) {
-            n.transform = "translate(" + (n.position.x - n.dimension.width / 2 || 0) + ", " + (n.position.y - n.dimension.height / 2 || 0) + ")";
+            n.transform = "translate(" + (n.position.x - n.dimension.width / 2 || 0) + ", " + (n.position.y - n.dimension.height / 2 ||
+                0) + ")";
             if (!n.data) {
                 n.data = {};
             }
@@ -79671,8 +79671,10 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
         var y = node.position.y - node.dimension.height / 2;
         node.transform = "translate(" + x + ", " + y + ")";
         var _loop_2 = function (link) {
-            if (link.target === node.id || link.source === node.id ||
-                link.target.id === node.id || link.source.id === node.id) {
+            if (link.target === node.id ||
+                link.source === node.id ||
+                link.target.id === node.id ||
+                link.source.id === node.id) {
                 if (this_2.layout && typeof this_2.layout !== 'string') {
                     var result = this_2.layout.updateEdge(this_2.graph, link);
                     var result$ = result instanceof external__rxjs_["Observable"] ? result : Object(external__rxjs_["of"])(result);
@@ -79826,6 +79828,17 @@ var graph_component_GraphComponent = /** @class */ (function (_super) {
      * @memberOf GraphComponent
      */
     GraphComponent.prototype.onMouseMove = function ($event) {
+        // if (this.isPanning && this.panningEnabled) {
+        //   this.onPan($event);
+        // } else if (this.isDragging && this.draggingEnabled) {
+        //   this.onDrag($event);
+        // }
+        if (!('movementX' in $event)) {
+            $event.movementX = this.prevX ? $event.screenX - this.prevX : 0;
+            $event.movementY = this.prevY ? $event.screenY - this.prevY : 0;
+            this.prevX = $event.screenX;
+            this.prevY = $event.screenY;
+        }
         if (this.isPanning && this.panningEnabled) {
             this.onPan($event);
         }

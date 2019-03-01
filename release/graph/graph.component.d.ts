@@ -78,6 +78,8 @@ export declare class GraphComponent extends BaseChartComponent implements OnInit
     _touchLastX: any;
     _touchLastY: any;
     zoomBefore: number;
+    prevX: any;
+    prevY: any;
     constructor(el: ElementRef, zone: NgZone, cd: ChangeDetectorRef, layoutService: LayoutService);
     groupResultsBy: (node: any) => string;
     /**

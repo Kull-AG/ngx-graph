@@ -173,6 +173,8 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
   _touchLastY = null;
 
   zoomBefore = 1;
+  prevX: any;
+  prevY: any;
 
   constructor(
     private el: ElementRef,
@@ -365,13 +367,13 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
     // Recalc the layout
     const result = this.layout.run(this.graph);
     const result$ = result instanceof Observable ? result : of(result);
-    this.graphSubscription.add(result$.subscribe(graph => {
-      this.graph = graph;
-      this.tick();
-    }));
-    result$
-      .pipe(first(graph => graph.nodes.length > 0))
-      .subscribe(() => this.applyNodeDimensions());
+    this.graphSubscription.add(
+      result$.subscribe(graph => {
+        this.graph = graph;
+        this.tick();
+      })
+    );
+    result$.pipe(first(graph => graph.nodes.length > 0)).subscribe(() => this.applyNodeDimensions());
 
     this.restoreZoomBeforeLoad();
   }
@@ -379,28 +381,24 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
   tick() {
     // Transposes view options to the node
     this.graph.nodes.map(n => {
-      n.transform = `translate(${
-        n.position.x - n.dimension.width / 2 || 0}, ${n.position.y - n.dimension.height / 2 || 0
-        })`;
+      n.transform = `translate(${n.position.x - n.dimension.width / 2 || 0}, ${n.position.y - n.dimension.height / 2 ||
+        0})`;
       if (!n.data) {
         n.data = {};
       }
       if (!n.data.color) {
-
         n.data = {
           color: this.colors.getColor(this.groupResultsBy(n))
         };
       }
     });
     (this.graph.clusters || []).map(n => {
-      n.transform = `translate(${
-        n.position.x - n.dimension.width / 2 || 0}, ${n.position.y - n.dimension.height / 2 || 0
-        })`;
+      n.transform = `translate(${n.position.x - n.dimension.width / 2 || 0}, ${n.position.y - n.dimension.height / 2 ||
+        0})`;
       if (!n.data) {
         n.data = {};
       }
       if (!n.data.color) {
-
         n.data = {
           color: this.colors.getColor(this.groupResultsBy(n))
         };
@@ -559,7 +557,7 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
   createGraph(): void {
     this.graphSubscription.unsubscribe();
     this.graphSubscription = new Subscription();
-    const initializeNode = (n) => {
+    const initializeNode = n => {
       if (!n.id) {
         n.id = id();
       }
@@ -759,16 +757,20 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
 
     for (const link of this.graph.edges) {
       if (
-        link.target === node.id || link.source === node.id ||
-        (link.target as any).id === node.id || (link.source as any).id === node.id
+        link.target === node.id ||
+        link.source === node.id ||
+        (link.target as any).id === node.id ||
+        (link.source as any).id === node.id
       ) {
         if (this.layout && typeof this.layout !== 'string') {
           const result = this.layout.updateEdge(this.graph, link);
           const result$ = result instanceof Observable ? result : of(result);
-          this.graphSubscription.add(result$.subscribe(graph => {
-            this.graph = graph;
-            this.redrawEdge(link);
-          }));
+          this.graphSubscription.add(
+            result$.subscribe(graph => {
+              this.graph = graph;
+              this.redrawEdge(link);
+            })
+          );
         }
       }
     }
@@ -924,6 +926,18 @@ export class GraphComponent extends BaseChartComponent implements OnInit, OnChan
    */
   @HostListener('document:mousemove', ['$event'])
   onMouseMove($event: MouseEvent): void {
+    // if (this.isPanning && this.panningEnabled) {
+    //   this.onPan($event);
+    // } else if (this.isDragging && this.draggingEnabled) {
+    //   this.onDrag($event);
+    // }
+    if (!('movementX' in $event)) {
+      (<any>$event).movementX = this.prevX ? (<any>$event).screenX - this.prevX : 0;
+      (<any>$event).movementY = this.prevY ? (<any>$event).screenY - this.prevY : 0;
+
+      this.prevX = (<any>$event).screenX;
+      this.prevY = (<any>$event).screenY;
+    }
     if (this.isPanning && this.panningEnabled) {
       this.onPan($event);
     } else if (this.isDragging && this.draggingEnabled) {
